@@ -32,14 +32,15 @@
       		<c:if test="${errors.onDescription != null}"><p class="text-danger"><spring:message code="${errors.onDescription}"/></p></c:if>
     	</div>
   	</div>
-  	
-    <div class="form-group ${errors.onFile != null ? 'has-error' : ''}">
-        <label for="ReportTemplateFile" class="col-sm-2 control-label"><spring:message code="pages.edit.label.file"/>:</label>
-        <div class="col-sm-6">
-            <input class="form-control" type="file" name="file" class="form-control" id="ReportTemplateFile" placeholder="<spring:message code="pages.edit.label.file"/>...">
-            <c:if test="${errors.onFile != null}"><p class="text-danger"><spring:message code="${errors.onFile}"/></p></c:if>
-        </div>
-    </div>
+  	<c:forEach var="locale" items="${locales}" varstatus="status">
+	    <div class="form-group ${errors.onFile != null ? 'has-error' : ''}">
+	        <label for="ReportTemplateFile" class="col-sm-2 control-label">locale.toString() <spring:message code="pages.edit.label.file"/>:</label>
+	        <div class="col-sm-6">
+	            <input class="form-control" type="file" name="files[status.index]" class="form-control" id="ReportTemplateFile" placeholder="<spring:message code="pages.edit.label.file"/>...">
+	            <c:if test="${errors.onFile != null}"><p class="text-danger"><spring:message code="${errors.onFile}"/></p></c:if>
+	        </div>
+	    </div>
+    </c:forEach>
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-3">
@@ -63,19 +64,24 @@
         	</tr>
       	</thead>
      	<tbody>
-			<c:forEach var="file" items="${reportPreviousFiles}">
-				<tr>
-					<td class="col-md-5">${file.name}</td>
-					<td class="col-md-2 text-center">${file.date}</td>
-					<td class="col-md-2 text-center">${file.size}</td>
-					<td class="col-md-3 text-center">
-						<div class="btn-group">
-							<a href="${file.link}" class="btn btn-sm btn-default">
-								<spring:message code="action.download"/>
-							</a>
-           				</div>
-           			</td>
-				</tr>
+			<c:forEach var="locale" items="${locales}">
+				<tr><td>${locale.toString()}</td></tr>
+				<c:if test="${not empty reportPreviousFiles.get(locale)}">
+					<c:forEach var="file" items="${reportPreviousFiles.get(locale)}">
+						<tr>
+							<td class="col-md-5">${file.name}</td>
+							<td class="col-md-2 text-center">${file.date}</td>
+							<td class="col-md-2 text-center">${file.size}</td>
+							<td class="col-md-3 text-center">
+								<div class="btn-group">
+									<a href="${file.link}" class="btn btn-sm btn-default">
+										<spring:message code="action.download"/>
+									</a>
+		           				</div>
+		           			</td>
+						</tr>
+					</c:forEach>
+				</c:if>
 			</c:forEach>
     		</tbody>
    	</table>

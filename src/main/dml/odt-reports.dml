@@ -12,8 +12,22 @@ public class ReportTemplatesSystem {
     int servicePort;
 }
 
-relation ReportTemplateFile {
+public class LocalizedFileHistory {
+	Locale locale;
+}
+
+relation ReportTemplateLocalizedFileHistory {
     ReportTemplate playsRole report {
+      multiplicity 1..1;
+    }
+
+    LocalizedFileHistory playsRole localizedFileHistory {
+      multiplicity 1..*;
+    }
+}
+
+relation LocalizedFileHistoryFiles {
+    LocalizedFileHistory playsRole fileHistory {
       multiplicity 0..1;
     }
 
